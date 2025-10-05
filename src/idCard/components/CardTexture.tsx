@@ -16,7 +16,10 @@ export default function CardTexture({ firstName, lastName, userId, batch, batchI
 
     const codeRef = useRef<THREE.Group>(null)
 
-    const { barcodeTexture, qrTexture } = useBarcodeAndQrTextures({ upc: userId });
+    const { barcodeTexture, qrTexture } = useBarcodeAndQrTextures({ 
+        rollNo: userId,
+        qrData: "https://github.com/Suryansh00001"
+    });
 
     const profilePictureTexture = useTexture(profilePicture)
 
@@ -56,18 +59,7 @@ export default function CardTexture({ firstName, lastName, userId, batch, batchI
                     {`${firstName} ${lastName}`}
                 </CreateText>
 
-                <CreateText
-                    fontSize={100}
-                    color={"#83accc"}
 
-                    fillOpacity={.15}
-                    setTransform={(e, width) => {
-                        e.position.set(225, 260 - width! / 2260 - width! / 2, 0)
-                        e.rotation.z = -Math.PI / 2
-                    }}
-                >
-                    {`${lastName}`}
-                </CreateText>
 
                 <group position={[0, 85, 0.1]}>
                     <mesh position={[266, 0, 0]}>
@@ -82,9 +74,9 @@ export default function CardTexture({ firstName, lastName, userId, batch, batchI
                 </group>
 
                 <CreateText
-                    fontSize={58}
+                    fontSize={70}
                     fillOpacity={0}
-                    strokeColor={"#77b1dd"}
+                    strokeColor={"#77dd8a"}
                     strokeWidth={1.5}
                     lineHeight={.9}
                     setTransform={(e, width, height) => e.position.set(-230 + width! / 2, (height! / 2) + 110, 0)}
@@ -111,7 +103,7 @@ export default function CardTexture({ firstName, lastName, userId, batch, batchI
                 </CreateText>
 
 
-                <Image position={[178, - 180, 0]} url={profilePicture}>
+                <Image position={[178, - 210, 0]} url={profilePicture}>
                     <roundedPlaneGeometry args={[150, 130, [0, '100%', '100%', 0]]} />
                 </Image>
 
