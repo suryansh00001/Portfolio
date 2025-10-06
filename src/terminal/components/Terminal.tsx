@@ -129,13 +129,7 @@ export const Terminal = () => {
   const formatOutput = (text: string) => {
     return text.split('\n').map((line, index) => (
       <div key={index}>
-        {line.includes('Suryansh Garg') ? (
-          <>
-            Hi, I'm <strong style={{ color: '#00ff88' }}>Suryansh Garg</strong>, a Sophomore at IIT BHU.
-          </>
-        ) : (
-          line
-        )}
+        {line}
       </div>
     ));
   };

@@ -1,16 +1,16 @@
 export const commands = {
   help: `🧭 Command Index
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- about           📖  Learn about Suryansh Garg
- projects        🚀  Explore featured creations
- skills          🛠️  View technical skills & tools
- experience      💼  Professional & research background
- education       🎓  Academic milestones
- certifications  🏆  Verified expertise
- leadership      👥  Leadership & community impact
- contact         📞  Connect with me
- sudo            🔐  Secret command... or is it?
- clear           🧹  Clear the terminal
+ ~ about..........📖 Learn about Suryansh Garg
+ ~ projects.......🚀 Explore featured creations  
+ ~ skills.........🛠️ View technical skills & tools
+ ~ experience.....💼 Professional & research background
+ ~ education......🎓 Academic milestones
+ ~ certifications.🏆 Verified expertise
+ ~ leadership.....👥 Leadership & community impact
+ ~ contact........📞 Connect with me
+ ~ sudo...........🔐 Secret command... or is it?
+ ~ clear..........🧹 Clear the terminal
 
 💡 Tip: Type any command and hit [Enter] to explore.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
