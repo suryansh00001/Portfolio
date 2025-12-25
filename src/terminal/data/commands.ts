@@ -33,43 +33,78 @@ building intelligent, secure, and high-performance systems.
 🎯 Always learning, building, and pushing boundaries.
 `,
 
-  projects: `
-🚀 PROJECTS :: FEATURED & RESEARCH
+projects: `
+🚀 PROJECTS :: FEATURED & PRODUCTION-GRADE
 ──────────────────────────────────────────────
-🧬 Animation Club Website — Frontend Developer  
-> Built responsive UI with React + Tailwind CSS.  
-> Collaborated with design & backend teams on a cyber-themed platform.  
-> 🔗 Live Demo: https://animation-club.vercel.app  
+🛰️ IceLink — Real-Time Video Communication Platform (WebRTC)
+> Built a peer-to-peer video calling system using WebRTC with custom signaling.
+> Implemented SDP exchange, ICE candidate handling, and connection recovery.
+> Designed for NAT traversal, multi-peer scalability, and fault tolerance.
+> Tech: WebRTC • WebSockets • Node.js • Docker
+> 🔗 Repo: https://github.com/suryansh00001/icelink
 
-💾 CHIP-8 Emulator — Systems Project  
-> Implemented in C++; opcode parsing, memory, and basic rendering.  
-> 🔗 Source Code: https://github.com/suryansh00001/CHIP-8_CPP  
+🧠 AI Search Chat — Perplexity-Style Interface
+> Full-stack AI-powered search chat with real-time streaming responses.
+> Implemented SSE-based token streaming, tool-call visualization & citations.
+> Integrated PDF viewer with animated transitions and inline references.
+> Tech: Next.js • FastAPI • TypeScript • Python • SSE
+> ⚠️ Demo tested locally (cloud instance currently off to save free credits)
 
-🔐 GenPas — AI-Driven Secure Password Generator  
-> Generates secure, human-friendly passwords using ML & cryptography.  
-> 🔗 Repository: https://github.com/suryansh00001/genpas  
 
-📊 Survey Papers  
-> Deep Surveillance Systems — AI-based monitoring & anomaly detection  
-> 🔗 Research Paper: https://drive.google.com/file/d/1RkK5YzoRfohdHGz6W4g06LGbjETu4YtN/view?usp=sharing  
-> Adversarial Attacks — vulnerabilities & defense in neural networks  
-> 🔗 Research Paper: https://drive.google.com/file/d/1a7JkJQF-7qOPfsay34QgntCGVqwZA5Dl/view?usp=sharing  
+💾 CHIP-8 Emulator — Systems Programming
+> Built a low-level CHIP-8 emulator in C++ from scratch.
+> Implemented fetch–decode–execute pipeline, opcode handling, timers & memory.
+> Rendered 64×32 monochrome graphics with accurate cycle timing.
+> Tech: C++ • Low-level Systems Design
+> 🔗 Repo: https://github.com/suryansh00001/CHIP-8_CPP
 
-🧠 Ongoing R&D  
-> AI-CyberSec integration, algorithmic optimization tools, and hackathon prototypes.
+🔐 GenPas — AI-Assisted Secure Password Generator
+> Generates secure yet human-friendly passwords using ML heuristics.
+> Focused on entropy, memorability, and cryptographic safety.
+> Tech: Python • Security Concepts • ML
+> 🔗 Repo: https://github.com/suryansh00001/genpas
+
+📊 Research & Survey Papers
+> Deep Surveillance Systems — anomaly detection & AI monitoring
+> 🔗 https://drive.google.com/file/d/1RkK5YzoRfohdHGz6W4g06LGbjETu4YtN/view
+> Adversarial Attacks on Neural Networks — vulnerabilities & defenses
+> 🔗 https://drive.google.com/file/d/1a7JkJQF-7qOPfsay34QgntCGVqwZA5Dl/view
+
+🧪 Ongoing R&D
+> Generative UI systems, AI-CyberSecurity integration & systems-level tooling.
 `,
 
-  skills: `
-🛠️ SKILLS :: TECHNICAL STACK
+skills: `
+🛠️ SKILLS :: ENGINEERING TOOLCHAIN
 ──────────────────────────────────────────────
-💻 Languages:   TypeScript • JavaScript • Python • C++  
-🌐 Frontend:    React • Next.js • Tailwind CSS • Three.js  
-🧩 Backend:     Node.js • Express • FastAPI • REST APIs  
-🤖 AI/ML:       TensorFlow • PyTorch • Scikit-learn  
-☁️ Cloud/DevOps: AWS • Docker • Vercel • Git  
-🎨 Creative:    Figma • Blender • Adobe Suite  
+💻 Languages
+> TypeScript • JavaScript • Python • C++ • Kotlin • Go (learning)
 
-> Constantly expanding toolkit through open-source & hands-on projects.
+🌐 Frontend
+> React • Next.js (App Router) • Tailwind CSS • Framer Motion
+> Streaming UI • Generative UI Components • Responsive Design
+
+🧩 Backend & Systems
+> Node.js • Express • FastAPI • WebSockets • REST APIs
+> Server-Sent Events (SSE) • Async Python • System Design
+
+🤖 AI / ML
+> PyTorch • TensorFlow • Scikit-learn • ONNX Runtime
+> Model Inference • Optimization • Adversarial Robustness
+
+📡 Real-Time & Networking
+> WebRTC • SDP / ICE • Peer-to-Peer Systems • NAT Traversal
+
+☁️ DevOps & Cloud
+> Docker • AWS EC2 • Vercel • Linux • Git & GitHub
+
+🔐 Cybersecurity
+> CTFs • Secure Auth • Cryptography Basics • Threat Modeling
+
+🎨 Creative & Tooling
+> Figma • Blender • Jetpack Compose • Android Tooling
+
+> Focus: building performant, secure, real-time systems with clean architecture.
 `,
 
   experience: `
