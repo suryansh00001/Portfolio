@@ -58,11 +58,24 @@ projects: `
 > Tech: C++ • Low-level Systems Design
 > 🔗 Repo: https://github.com/suryansh00001/CHIP-8_CPP
 
-🔐 GenPas — AI-Assisted Secure Password Generator
-> Generates secure yet human-friendly passwords using ML heuristics.
-> Focused on entropy, memorability, and cryptographic safety.
-> Tech: Python • Security Concepts • ML
-> 🔗 Repo: https://github.com/suryansh00001/genpas
+🛡️ Sudarshan AI — Zero-Trust Security Middleware for LLM Apps
+> End-to-end AI security pipeline with Chaaya, Kavach, Rakshak & Chakra modules.
+> Covers secret leakage, prompt injection, RAG poisoning, extraction & jailbreak defense.
+> Includes risk-engine decisions (ALLOW / LOG / BLOCK) with audit trails.
+> Tech: Python • FastAPI • FAISS • PyRIT • Gemini API
+
+🎨 Blender LLM Assistant — Talk to Blender, Watch it Create
+> Blender addon that converts natural language into executable Blender Python.
+> Multi-provider support (Gemini, OpenAI, Claude) with preview-first safety checks.
+> Blocks unsafe filesystem/network/system operations during generated code execution.
+> Tech: Blender Python API • LLM APIs • Secure AST Validation
+> 🔗 Repo: https://github.com/suryansh00001/Blender-Extension
+
+🧭 Bet AI — Hedera-Powered AI Prediction Market
+> Decentralized prediction market with oracle-driven settlement on Hedera testnet.
+> AI confidence scoring with news/sentiment context and autonomous agent mode.
+> Real-time indexed market state and transparent on-chain payout flow.
+> Tech: React • Vite • Flask • Hedera Smart Contracts • Envio
 
 📊 Research & Survey Papers
 > Deep Surveillance Systems — anomaly detection & AI monitoring
@@ -116,6 +129,8 @@ skills: `
 🔧 Open Source Contributions  
 > Contributed to Google MCP repository and community projects.  
 > Developed frontend for IIT BHU Animation Club site.
+> Built and improved the Technex website with modern workflows.
+> Handled CTFd infrastructure setup, deployment, and operational maintenance.
 
 🚀 Startup Experience — SocialSense  
 > Assisted in AI/Web prototypes & optimizations.  
@@ -137,6 +152,8 @@ skills: `
   certifications: `
 🏆 CERTIFICATIONS :: CREDENTIALS & AWARDS
 ──────────────────────────────────────────────
+🔹 Shilp ML Forge — 1st place  
+🔹 DebugIT — 3rd place  
 🔹 CTF Competitions — hands-on cybersecurity challenges  
 🔹 SimuSolve Certification — simulation & problem-solving  
 🔹 CivicTech Certification — social innovation via technology  

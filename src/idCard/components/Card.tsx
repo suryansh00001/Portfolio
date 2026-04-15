@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { RenderTexture, useGLTF, useTexture } from "@react-three/drei";
-import { extend, useFrame, useThree } from "@react-three/fiber";
+import { ThreeEvent, extend, useFrame, useThree } from "@react-three/fiber";
 import { BallCollider, CuboidCollider, RigidBody, useRopeJoint, useSphericalJoint } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { useRef, useMemo } from "react";
@@ -13,12 +13,24 @@ useTexture.preload("/band.jpg");
 
 const segmentProps = { type: "dynamic", canSleep: true, colliders: false, angularDamping: 2, linearDamping: 2 } as const;
 
-const Card = ({ student: user, animationDuration = 4 }: { student: User; animationDuration?: number }) => {
-  const cardRef = useRef<THREE.Group>(null);
-  const animationProgress = useRef(0);
-  const startRotation = useRef(0);
-  const targetRotation = useRef(0);
-  const isRotating = useRef(false);
+const Card = ({ student: user }: { student: User }) => {
+  const cardVisualRef = useRef<THREE.Group>(null);
+  const isDragging = useRef(false);
+  const activePointerId = useRef<number | null>(null);
+  const lastPointer = useRef({ x: 0, y: 0, time: 0 });
+  const throwVelocity = useRef({ x: 0, y: 0 });
+  const dragDistance = useRef(0);
+  const suppressClick = useRef(false);
+  const isClickFlipping = useRef(false);
+  const clickFlipProgress = useRef(0);
+  const clickFlipStartY = useRef(0);
+  const clickFlipEndY = useRef(0);
+  const dragThresholdPx = 8;
+  const clickFlipDuration = 0.42;
+  const dragAngularScale = 0.0018;
+  const dragMaxAngularVelocity = 12;
+  const throwAngularScale = 0.0014;
+  const throwMaxAngularVelocity = 12;
 
   const fixedPoint = useRef<RigidBodyType>(null);
   const ropeTop = useRef<RigidBodyType>(null);
@@ -50,41 +62,108 @@ const Card = ({ student: user, animationDuration = 4 }: { student: User; animati
 
   useMemo(() => { texture.wrapS = texture.wrapT = THREE.RepeatWrapping; }, [texture]);
 
-  const elasticOut = (t: number) => {
-    const p = .4;
-    return Math.pow(2, -10 * t) * Math.sin((t - p / 4) * (2 * Math.PI) / p) + 1;
+  const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const normalizeAngle = (angle: number) => Math.atan2(Math.sin(angle), Math.cos(angle));
+
+  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation();
+    isClickFlipping.current = false;
+    isDragging.current = true;
+    activePointerId.current = event.pointerId;
+    lastPointer.current = { x: event.clientX, y: event.clientY, time: performance.now() };
+    throwVelocity.current = { x: 0, y: 0 };
+    dragDistance.current = 0;
+    suppressClick.current = false;
+    const target = event.target as unknown as {
+      setPointerCapture?: (pointerId: number) => void;
+    };
+    target.setPointerCapture?.(event.pointerId);
+    card.current?.wakeUp();
   };
 
-  const triggerRotation = () => {
-    card.current?.setAngvel({ x: 0, y: 2, z: 0 }, true);
+  const handlePointerMove = (event: ThreeEvent<PointerEvent>) => {
+    if (!isDragging.current || activePointerId.current !== event.pointerId) return;
+    event.stopPropagation();
+
+    const now = performance.now();
+    const dx = event.clientX - lastPointer.current.x;
+    const dy = event.clientY - lastPointer.current.y;
+    dragDistance.current += Math.abs(dx) + Math.abs(dy);
+    if (dragDistance.current > dragThresholdPx) {
+      suppressClick.current = true;
+    }
+    const dt = Math.max((now - lastPointer.current.time) / 1000, 1 / 120);
+
+    const velocityX = dx / dt;
+    const velocityY = dy / dt;
+    throwVelocity.current = { x: velocityX, y: velocityY };
+
+    card.current?.setAngvel({
+      x: THREE.MathUtils.clamp(-velocityY * dragAngularScale, -dragMaxAngularVelocity, dragMaxAngularVelocity),
+      y: THREE.MathUtils.clamp(velocityX * dragAngularScale, -dragMaxAngularVelocity, dragMaxAngularVelocity),
+      z: 0,
+    }, true);
+
+    lastPointer.current = { x: event.clientX, y: event.clientY, time: now };
+  };
+
+  const handlePointerUp = (event: ThreeEvent<PointerEvent>) => {
+    if (!isDragging.current || activePointerId.current !== event.pointerId) return;
+    event.stopPropagation();
+    isDragging.current = false;
+    activePointerId.current = null;
+
+    const target = event.target as unknown as {
+      releasePointerCapture?: (pointerId: number) => void;
+    };
+    target.releasePointerCapture?.(event.pointerId);
+
+    const currentAngVel = card.current?.angvel();
+    card.current?.setAngvel({
+      x: THREE.MathUtils.clamp((currentAngVel?.x || 0) - throwVelocity.current.y * throwAngularScale, -throwMaxAngularVelocity, throwMaxAngularVelocity),
+      y: THREE.MathUtils.clamp((currentAngVel?.y || 0) + throwVelocity.current.x * throwAngularScale, -throwMaxAngularVelocity, throwMaxAngularVelocity),
+      z: currentAngVel?.z || 0,
+    }, true);
+  };
+
+  const handleClick = (event: ThreeEvent<MouseEvent>) => {
+    event.stopPropagation();
+    if (suppressClick.current) {
+      suppressClick.current = false;
+      return;
+    }
+
+    const currentY = cardVisualRef.current?.rotation.y ?? 0;
+    clickFlipStartY.current = currentY;
+    clickFlipEndY.current = currentY + Math.PI;
+    clickFlipProgress.current = 0;
+    isClickFlipping.current = true;
+
+    card.current?.wakeUp();
+    const currentAngVel = card.current?.angvel();
+    card.current?.setAngvel({
+      x: THREE.MathUtils.clamp((currentAngVel?.x || 0) + (Math.random() - 0.5) * 1.6, -4, 4),
+      y: THREE.MathUtils.clamp((currentAngVel?.y || 0) + (Math.random() - 0.5) * 0.6, -1, 1),
+      z: THREE.MathUtils.clamp((currentAngVel?.z || 0) + (Math.random() - 0.5) * 1.6, -4, 4),
+    }, true);
     const currentPos = card.current?.translation();
     card.current?.setTranslation({
-      x: (currentPos?.x || 0) + (Math.random() - 0.5) * 0.6,
-      y: (currentPos?.y || 0) - Math.random() * 0.1,
-      z: (currentPos?.z || 0) + (Math.random() - 0.5) * 0.1,
-    });
-
-    const currentY = cardRef.current?.rotation.y ?? 0;
-    startRotation.current = currentY;
-    targetRotation.current = Math.round((currentY + Math.PI) / Math.PI) * Math.PI;
-
-
-    animationProgress.current = 0;
-    isRotating.current = true;
+      x: (currentPos?.x || 0) + (Math.random() - 0.5) * 0.18,
+      y: (currentPos?.y || 0) - Math.random() * 0.08,
+      z: (currentPos?.z || 0) + (Math.random() - 0.5) * 0.05,
+    }, true);
   };
 
   useFrame((_, delta) => {
-    if (isRotating.current && cardRef.current) {
-      animationProgress.current += delta;
-      const progress = animationProgress.current / animationDuration;
+    if (isClickFlipping.current && cardVisualRef.current) {
+      clickFlipProgress.current += delta / clickFlipDuration;
+      const t = Math.min(clickFlipProgress.current, 1);
+      const eased = easeInOutCubic(t);
+      cardVisualRef.current.rotation.y = THREE.MathUtils.lerp(clickFlipStartY.current, clickFlipEndY.current, eased);
 
-      if (progress >= 1) {
-        cardRef.current.rotation.y = targetRotation.current;
-        isRotating.current = false;
-      } else {
-        const eased = elasticOut(progress);
-        cardRef.current.rotation.y =
-          startRotation.current + (targetRotation.current - startRotation.current) * eased;
+      if (t >= 1) {
+        cardVisualRef.current.rotation.y = normalizeAngle(clickFlipEndY.current);
+        isClickFlipping.current = false;
       }
     }
 
@@ -109,11 +188,13 @@ const Card = ({ student: user, animationDuration = 4 }: { student: User; animati
 
     cardAngVel.copy(card.current?.angvel() || tempVec2);
     cardRot.copy(card.current?.rotation() || tempVec2);
-    card.current?.setAngvel({
-      x: cardAngVel.x,
-      y: cardAngVel.y - cardRot.y * 0.5,
-      z: cardAngVel.z,
-    });
+    if (!isDragging.current) {
+      card.current?.setAngvel({
+        x: cardAngVel.x,
+        y: cardAngVel.y - cardRot.y * 0.5,
+        z: cardAngVel.z,
+      });
+    }
   });
 
   return (
@@ -133,7 +214,15 @@ const Card = ({ student: user, animationDuration = 4 }: { student: User; animati
         <RigidBody ref={card} {...segmentProps} position={[2, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group scale={3} position={[0, -2.125, -0.05]}>
-            <group onClick={triggerRotation} ref={cardRef}>
+            <group
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
+              onPointerCancel={handlePointerUp}
+              onClick={handleClick}
+              ref={cardVisualRef}
+            >
               <mesh geometry={nodes.card.geometry}>
                 <meshPhysicalMaterial roughness={1} clearcoat={.5} clearcoatRoughness={1} metalness={.3}>
                   <RenderTexture colorSpace={THREE.SRGBColorSpace} attach="map" width={1024} height={1024}>
