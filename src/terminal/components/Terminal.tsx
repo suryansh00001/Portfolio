@@ -37,6 +37,13 @@ export const Terminal = () => {
     return () => terminal?.removeEventListener('click', handleClick);
   }, []);
 
+  // Auto-focus input when command finishes running
+  useEffect(() => {
+    if (!isCommandRunning) {
+      inputRef.current?.focus();
+    }
+  }, [isCommandRunning]);
+
   // CSS handles cursor blinking animation
 
   // Typing animation effect
