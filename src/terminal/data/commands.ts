@@ -77,6 +77,23 @@ projects: `
 > Real-time indexed market state and transparent on-chain payout flow.
 > Tech: React • Vite • Flask • Hedera Smart Contracts • Envio
 
+🤖 Doubt.AI — Real-Time C++ AI Study Assistant
+> Native C++ real-time AI study assistant triggered via system-wide hotkeys.
+> Captures screen area and the last 60 seconds of lecture audio to instantly resolve academic doubts.
+> Tech: C++ • Desktop API Integration • Audio Buffering & Processing • Gemini API
+> 🔗 Repo: https://github.com/suryansh00001/Doubt.AI
+
+🎬 Animation Club Platform — Full-Stack Showcase & Events Portal
+> Custom-built full-stack platform for showcasing member artwork and event registrations.
+> Implemented secure JWT authorization, role-based admin controls, and dynamic galleries.
+> Tech: React • Node.js • Express • MongoDB • JWT • CSS3
+> 🔗 Repo: https://github.com/suryansh00001/Animation-Club
+
+♟️ Web3 Chess — Decentralized Chess Platform
+> Built a peer-to-peer decentralized chess game platform.
+> Implemented secure smart contract game state verification and decentralized player matching.
+> Tech: React • Solidity • ethers.js • Web3 Smart Contracts
+
 📊 Research & Survey Papers
 > Deep Surveillance Systems — anomaly detection & AI monitoring
 > 🔗 https://drive.google.com/file/d/1RkK5YzoRfohdHGz6W4g06LGbjETu4YtN/view
@@ -126,8 +143,11 @@ skills: `
 🏢 Summer Internship — under Prof. Indradeep Mastan, IIT BHU  
 > Conducted AI/ML research; developed and tested models in experimental setups.
 
+🏢 Research Internship — IIT Roorkee  
+> Conducted research on transportation systems, engineering models, and data-driven simulation.
+
 🔧 Open Source Contributions  
-> Contributed to Google MCP repository and community projects.  
+> Contributed to Google's MCP (Model Context Protocol) ecosystem, including google/mcp-security.  
 > Developed frontend for IIT BHU Animation Club site.
 > Built and improved the Technex website with modern workflows.
 > Handled CTFd infrastructure setup, deployment, and operational maintenance.
@@ -158,7 +178,7 @@ skills: `
 🔹 SimuSolve Certification — simulation & problem-solving  
 🔹 CivicTech Certification — social innovation via technology  
 🔹 Robotics Winter Camp — Top-5 rank, automation & control  
-🔹 Google MCP — open-source contributions  
+🔹 Google MCP Contributor — Model Context Protocol open-source contributions  
 🔹 AWS Cloud Practitioner — foundational cloud skills  
 🔹 DeepLearning.AI TensorFlow Developer — ML specialization  
 

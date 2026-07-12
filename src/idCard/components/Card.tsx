@@ -53,7 +53,7 @@ const Card = ({ student: user }: { student: User }) => {
   const tempVec = useMemo(() => new THREE.Vector3(), []);
   const tempVec2 = useMemo(() => new THREE.Vector3(), []);
   const cardAngVel = useMemo(() => new THREE.Vector3(), []);
-  const cardRot = useMemo(() => new THREE.Vector3(), []);
+  const cardRotQ = useMemo(() => new THREE.Quaternion(), []);
 
   useRopeJoint(fixedPoint as React.RefObject<RigidBodyType>, ropeTop as React.RefObject<RigidBodyType>, [[0, -0.5, 0], [0, 0, 0], 1]);
   useRopeJoint(ropeTop as React.RefObject<RigidBodyType>, ropeMiddle as React.RefObject<RigidBodyType>, [[0, 0, 0], [0, 0, 0], 1]);
@@ -187,13 +187,19 @@ const Card = ({ student: user }: { student: User }) => {
     bandLine.current?.geometry.setPoints(curve.getPoints(32));
 
     cardAngVel.copy(card.current?.angvel() || tempVec2);
-    cardRot.copy(card.current?.rotation() || tempVec2);
-    if (!isDragging.current) {
-      card.current?.setAngvel({
-        x: cardAngVel.x,
-        y: cardAngVel.y - cardRot.y * 0.5,
-        z: cardAngVel.z,
-      });
+    const currentRot = card.current?.rotation();
+    if (currentRot) {
+      cardRotQ.set(currentRot.x, currentRot.y, currentRot.z, currentRot.w);
+      const euler = new THREE.Euler().setFromQuaternion(cardRotQ, "YXZ");
+      const diffY = normalizeAngle(2 * euler.y) / 2;
+
+      if (!isDragging.current) {
+        card.current?.setAngvel({
+          x: cardAngVel.x,
+          y: cardAngVel.y - diffY * 0.8, // gentle restoring torque targeting flat view
+          z: cardAngVel.z,
+        });
+      }
     }
   });
 
