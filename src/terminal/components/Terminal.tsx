@@ -80,8 +80,12 @@ export const Terminal = () => {
     };
   }, []);
 
+
+
   const handleCommand = useCallback((cmd: string) => {
-    const command = cmd.toLowerCase().trim();
+    const trimmed = cmd.trim();
+    const args = trimmed.split(/\s+/);
+    const command = args[0].toLowerCase();
     
     if (command === "clear") {
       setHistory([]);
@@ -95,8 +99,58 @@ export const Terminal = () => {
       return;
     }
 
-    const output = commands[command as keyof typeof commands] || `Command not found: ${command}. Type 'help' for available commands.`;
+    let output = "";
     
+    if (command === "sudo") {
+      const password = args[1];
+      if (!password) {
+        output = `
+🔐 SUDO :: ADMINISTRATIVE ACCESS REQUIRED
+──────────────────────────────────────────────
+Usage: sudo [password]
+Tip: The password is hidden somewhere in the source comments of this page. Use Inspect Mode to find it. 😉
+`;
+      } else if (password === "cutiepie") {
+        output = `
+🔓 ACCESS GRANTED :: REDIRECTING TO ROOT CONSOLE...
+──────────────────────────────────────────────
+`;
+        setIsCommandRunning(true);
+        setHistory(prev => [
+          ...prev, 
+          { type: 'command', content: cmd },
+          { type: 'output', content: output, isTyping: true, displayedContent: '' }
+        ]);
+        
+        setTimeout(() => {
+          setHistory(currentHistory => {
+            typeText(output, currentHistory.length - 1);
+            return currentHistory;
+          });
+          // Redirect to Rick Roll link
+          setTimeout(() => {
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+          }, 1500);
+        }, 100);
+        
+        setCommandHistory(prev => {
+          const newHistory = [command, ...prev.filter(h => h !== command)];
+          return newHistory.slice(0, 50);
+        });
+        setHistoryIndex(-1);
+        setInput("");
+        return;
+      } else {
+        output = `
+❌ ACCESS DENIED :: INCORRECT PASSWORD
+──────────────────────────────────────────────
+Intruder warning logged to sys.log.
+`;
+      }
+    } else {
+      output = commands[command as keyof typeof commands] || `Command not found: ${command}. Type 'help' for available commands.`;
+    }
+
     setIsCommandRunning(true);
     
     // Add command to history first
@@ -120,8 +174,8 @@ export const Terminal = () => {
         typeText(output, lastIndex);
         return currentHistory;
       });
-    }, 100); // Small delay before typing starts
-  }, []);
+    }, 100);
+  }, [typeText]);
 
   const getAutoComplete = useCallback((partial: string) => {
     if (!partial) return [];
@@ -275,7 +329,7 @@ export const Terminal = () => {
 
 
   return (
-    <>
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', width: '100%', minHeight: 0 }}>
       {/* Top Navigation Bar */}
       <div style={{
         borderBottom: '1px solid #00ff88',
@@ -397,6 +451,7 @@ export const Terminal = () => {
         </div>
       </div>
 
-    </>
+
+    </div>
   );
 };
